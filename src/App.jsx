@@ -10,6 +10,7 @@ import Memories from './components/Memories'
 import Settings from './components/Settings'
 import Toast from './components/Toast'
 import { useTravelData } from './hooks/useTravelData'
+import { firebaseProjectId } from './firebase'
 import { PLAYERS, STORAGE_KEYS, VIEWS } from './utils/constants'
 
 export default function App() {
@@ -70,7 +71,33 @@ export default function App() {
         </div>
       )}
       {data.error && (
-        <div className="demo-banner demo-banner--error">⚠️ Fout bij online opslag: {data.error}</div>
+        <div className="demo-banner demo-banner--error">
+          ⚠️ Fout bij online opslag: {data.error}
+          {/permission|insufficient|PERMISSION_DENIED/i.test(data.error) && (
+            <div className="demo-banner__hint">
+              De Firestore-regels blokkeren toegang. Controleer in de{' '}
+              <a
+                href="https://console.firebase.google.com/"
+                target="_blank"
+                rel="noreferrer"
+              >
+                Firebase Console
+              </a>
+              : <strong>1)</strong> staan de regels in project <code>{firebaseProjectId}</code>?{' '}
+              <strong>2)</strong> heb je op <strong>Publish/Publiceren</strong> geklikt?{' '}
+              <strong>3)</strong> is de database de <code>(default)</code>-database? Plak deze
+              regels en publiceer ze:
+              <pre className="demo-banner__code">{`rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /{document=**} {
+      allow read, write: if true;
+    }
+  }
+}`}</pre>
+            </div>
+          )}
+        </div>
       )}
 
       <main className="app__main">

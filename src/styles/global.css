@@ -360,6 +360,32 @@ button {
   border-color: #f6c5bd;
   color: #a3271a;
 }
+.demo-banner__hint {
+  margin-top: 0.5rem;
+  font-size: 0.85rem;
+  line-height: 1.45;
+}
+.demo-banner__hint a {
+  color: #a3271a;
+  font-weight: 700;
+}
+.demo-banner__hint code {
+  background: rgba(163, 39, 26, 0.12);
+  padding: 0.05rem 0.3rem;
+  border-radius: 5px;
+  font-size: 0.82rem;
+}
+.demo-banner__code {
+  margin: 0.5rem 0 0;
+  background: #2b1512;
+  color: #ffd9d2;
+  padding: 0.7rem 0.9rem;
+  border-radius: 10px;
+  overflow-x: auto;
+  font-size: 0.78rem;
+  line-height: 1.4;
+  white-space: pre;
+}
 
 /* ---------- Main / map ---------- */
 .app__main {

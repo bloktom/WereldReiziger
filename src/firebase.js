@@ -16,6 +16,9 @@ const firebaseConfig = {
 // DEMO-modus (lokale mock data via localStorage).
 export const isFirebaseConfigured = Boolean(firebaseConfig.apiKey && firebaseConfig.projectId)
 
+// Handig voor diagnostiek in de UI: met welk project praat de app?
+export const firebaseProjectId = firebaseConfig.projectId || '(geen)'
+
 let app = null
 let db = null
 
