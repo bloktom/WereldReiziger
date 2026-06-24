@@ -40,6 +40,7 @@ export function useTravelData() {
   const mode = isFirebaseConfigured && db ? 'firebase' : 'mock'
   const [visited, setVisitedState] = useState({})
   const [battles, setBattlesState] = useState({})
+  const [profiles, setProfilesState] = useState({}) // { Floor: {avatarId}, Tom: {avatarId} }
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
 
@@ -57,6 +58,17 @@ export function useTravelData() {
       setVisitedState(loadLocal(STORAGE_KEYS.visited, {}))
       setBattlesState(loadLocal(STORAGE_KEYS.battles, {}))
     }
+    // Profielen laden (met eenmalige migratie van oude per-speler keys).
+    let profs = loadLocal(STORAGE_KEYS.profiles, null)
+    if (!profs) {
+      profs = {}
+      ;[PLAYERS.FLOOR, PLAYERS.TOM].forEach((p) => {
+        const old = localStorage.getItem(`${STORAGE_KEYS.avatar}.${p}`)
+        if (old) profs[p] = { player: p, avatarId: old }
+      })
+      saveLocal(STORAGE_KEYS.profiles, profs)
+    }
+    setProfilesState(profs)
     setLoading(false)
   }, [mode])
 
@@ -90,9 +102,21 @@ export function useTravelData() {
       },
       (err) => setError(err.message),
     )
+    const unsubProfiles = onSnapshot(
+      collection(db, 'profiles'),
+      (snap) => {
+        const obj = {}
+        snap.forEach((d) => {
+          obj[d.id] = d.data()
+        })
+        setProfilesState(obj)
+      },
+      (err) => setError(err.message),
+    )
     return () => {
       unsubVisited()
       unsubBattles()
+      unsubProfiles()
     }
   }, [mode])
 
@@ -108,6 +132,14 @@ export function useTravelData() {
     (next) => {
       setBattlesState(next)
       if (mode === 'mock') saveLocal(STORAGE_KEYS.battles, next)
+    },
+    [mode],
+  )
+
+  const persistProfiles = useCallback(
+    (next) => {
+      setProfilesState(next)
+      if (mode === 'mock') saveLocal(STORAGE_KEYS.profiles, next)
     },
     [mode],
   )
@@ -203,6 +235,23 @@ export function useTravelData() {
     [battles, mode, persistBattles],
   )
 
+  // Profielfoto (avatar) van een speler opslaan — gedeeld, zodat de ander het ziet.
+  const setProfileAvatar = useCallback(
+    async (player, avatarId) => {
+      const docData = {
+        player,
+        avatarId,
+        updatedAt: mode === 'firebase' ? serverTimestamp() : new Date().toISOString(),
+      }
+      if (mode === 'firebase') {
+        await setDoc(doc(db, 'profiles', player), docData, { merge: true })
+      } else {
+        persistProfiles({ ...profiles, [player]: docData })
+      }
+    },
+    [profiles, mode, persistProfiles],
+  )
+
   // Alleen voor demo-modus: zet de mock data terug naar de uitgangssituatie.
   const resetMockData = useCallback(() => {
     if (mode !== 'mock') return
@@ -218,10 +267,12 @@ export function useTravelData() {
     error,
     visited,
     battles,
+    profiles,
     setVisited,
     removeVisited,
     updateVisitedFields,
     saveBattleAnswers,
+    setProfileAvatar,
     resetMockData,
   }
 }

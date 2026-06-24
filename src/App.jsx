@@ -12,7 +12,7 @@ import Toast from './components/Toast'
 import AvatarPicker from './components/AvatarPicker'
 import { useTravelData } from './hooks/useTravelData'
 import { firebaseProjectId } from './firebase'
-import { loadAvatar, saveAvatar } from './data/avatars'
+import { DEFAULT_AVATAR_ID } from './data/avatars'
 import { PLAYERS, STORAGE_KEYS, VIEWS } from './utils/constants'
 
 export default function App() {
@@ -20,21 +20,29 @@ export default function App() {
   const [view, setView] = useState(VIEWS.MAP)
   const [selected, setSelected] = useState(null) // { code, name }
   const [toast, setToast] = useState('')
-  // Gekozen profielfoto per speler (uit localStorage).
-  const [avatars, setAvatars] = useState(() => ({
-    [PLAYERS.FLOOR]: loadAvatar(PLAYERS.FLOOR),
-    [PLAYERS.TOM]: loadAvatar(PLAYERS.TOM),
-  }))
   const [showAvatarPicker, setShowAvatarPicker] = useState(false)
   const data = useTravelData()
 
   const showToast = useCallback((msg) => setToast(msg), [])
 
-  // Profielfoto van de actieve speler wijzigen + onthouden.
-  const setAvatar = useCallback((p, id) => {
-    saveAvatar(p, id)
-    setAvatars((prev) => ({ ...prev, [p]: id }))
-  }, [])
+  // Gekozen profielfoto per speler komt uit de gedeelde data (Firestore/mock),
+  // zodat Floor en Tom elkaars foto zien.
+  const avatarOf = useCallback(
+    (p) => data.profiles?.[p]?.avatarId || DEFAULT_AVATAR_ID,
+    [data.profiles],
+  )
+
+  // Profielfoto van een speler wijzigen (gedeeld opslaan).
+  const setAvatar = useCallback(
+    async (p, id) => {
+      try {
+        await data.setProfileAvatar(p, id)
+      } catch (e) {
+        setToast('Profielfoto opslaan mislukt: ' + (e?.message || 'onbekende fout'))
+      }
+    },
+    [data],
+  )
 
   // Speler kiezen + onthouden in localStorage.
   const choosePlayer = useCallback((p) => {
@@ -83,7 +91,8 @@ export default function App() {
       <HeaderScore
         visited={data.visited}
         player={player}
-        avatarId={avatars[player]}
+        floorAvatarId={avatarOf(PLAYERS.FLOOR)}
+        tomAvatarId={avatarOf(PLAYERS.TOM)}
         onSwitchPlayer={switchPlayer}
         onAvatarClick={() => setShowAvatarPicker(true)}
       />
@@ -146,7 +155,7 @@ service cloud.firestore {
               <Settings
                 player={player}
                 mode={data.mode}
-                avatarId={avatars[player]}
+                avatarId={avatarOf(player)}
                 onSelectAvatar={(id) => setAvatar(player, id)}
                 onSwitchPlayer={switchPlayer}
                 onResetMock={data.resetMockData}
@@ -188,7 +197,7 @@ service cloud.firestore {
             </p>
             <AvatarPicker
               player={player}
-              current={avatars[player]}
+              current={avatarOf(player)}
               onSelect={(id) => {
                 setAvatar(player, id)
                 setToast('Profielfoto bijgewerkt!')

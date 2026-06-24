@@ -29,7 +29,7 @@ export default function Settings({ player, mode, avatarId, onSelectAvatar, onSwi
       <section className="settings__card">
         <h3>Profielfoto</h3>
         <div className="settings__avatar">
-          <Avatar player={player} avatarId={avatarId} size={64} />
+          <Avatar player={player} avatarId={avatarId} size={76} />
           <p>
             Kies hieronder je profielfoto. Standaard is een simpel icoon. Je keuze wordt
             onthouden in deze browser.

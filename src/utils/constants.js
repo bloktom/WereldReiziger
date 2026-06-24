@@ -22,8 +22,9 @@ export const STORAGE_KEYS = {
   player: 'wereldrace.player',
   visited: 'wereldrace.visited',
   battles: 'wereldrace.battles',
+  profiles: 'wereldrace.profiles',
   seeded: 'wereldrace.seeded.v1',
-  avatar: 'wereldrace.avatar', // + '.Floor' / '.Tom'
+  avatar: 'wereldrace.avatar', // + '.Floor' / '.Tom' (oude lokale opslag, fallback)
 }
 
 export const VIEWS = {

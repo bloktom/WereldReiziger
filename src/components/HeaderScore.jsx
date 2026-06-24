@@ -4,7 +4,14 @@ import { getScoreStatus } from '../data/funnyMessages'
 import Avatar from './Avatar'
 
 // Scorebalk bovenin: Floor vs Tom, wie staat voor, hoeveel gedeeld.
-export default function HeaderScore({ visited, player, avatarId, onSwitchPlayer, onAvatarClick }) {
+export default function HeaderScore({
+  visited,
+  player,
+  floorAvatarId,
+  tomAvatarId,
+  onSwitchPlayer,
+  onAvatarClick,
+}) {
   const floorCount = countVisited(visited, PLAYERS.FLOOR)
   const tomCount = countVisited(visited, PLAYERS.TOM)
   const shared = sharedCountryCodes(visited).length
@@ -23,26 +30,37 @@ export default function HeaderScore({ visited, player, avatarId, onSwitchPlayer,
 
         <div className="header-score__pills">
           <div className="score-pill score-pill--floor">
-            <span className="score-pill__name">Floor</span>
-            <span className="score-pill__value">{floorCount}</span>
-            <span className="score-pill__label">landen</span>
+            <Avatar
+              player={PLAYERS.FLOOR}
+              avatarId={floorAvatarId}
+              size={48}
+              onClick={player === PLAYERS.FLOOR ? onAvatarClick : undefined}
+              title={player === PLAYERS.FLOOR ? 'Wijzig je profielfoto' : 'Floor'}
+            />
+            <div className="score-pill__text">
+              <span className="score-pill__name">Floor</span>
+              <span className="score-pill__value">{floorCount}</span>
+              <span className="score-pill__label">landen</span>
+            </div>
           </div>
           <span className="score-vs">vs</span>
           <div className="score-pill score-pill--tom">
-            <span className="score-pill__name">Tom</span>
-            <span className="score-pill__value">{tomCount}</span>
-            <span className="score-pill__label">landen</span>
+            <Avatar
+              player={PLAYERS.TOM}
+              avatarId={tomAvatarId}
+              size={48}
+              onClick={player === PLAYERS.TOM ? onAvatarClick : undefined}
+              title={player === PLAYERS.TOM ? 'Wijzig je profielfoto' : 'Tom'}
+            />
+            <div className="score-pill__text">
+              <span className="score-pill__name">Tom</span>
+              <span className="score-pill__value">{tomCount}</span>
+              <span className="score-pill__label">landen</span>
+            </div>
           </div>
         </div>
 
         <div className="header-score__me">
-          <Avatar
-            player={player}
-            avatarId={avatarId}
-            size={42}
-            onClick={onAvatarClick}
-            title="Wijzig je profielfoto"
-          />
           <span className={`me-badge me-badge--${player.toLowerCase()}`}>
             Jij speelt als {player}
           </span>

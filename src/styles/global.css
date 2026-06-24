@@ -235,13 +235,21 @@ button {
   gap: 0.6rem;
 }
 .score-pill {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.3rem 0.9rem 0.3rem 0.35rem;
+  border-radius: 999px;
+  font-weight: 700;
+}
+.score-pill__text {
   display: grid;
   grid-template-columns: auto auto auto;
   align-items: baseline;
   gap: 0.35rem;
-  padding: 0.4rem 0.9rem;
-  border-radius: 999px;
-  font-weight: 700;
+}
+.score-pill--big {
+  padding: 0.45rem 1.1rem;
 }
 .score-pill--floor {
   background: var(--floor-soft);
@@ -1131,7 +1139,7 @@ button {
 /* ---------- Avatar picker ---------- */
 .avatar-picker {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(86px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(104px, 1fr));
   gap: 0.7rem;
   margin-top: 0.8rem;
 }
@@ -1151,8 +1159,8 @@ button {
   background: var(--bg);
 }
 .avatar-option__media {
-  width: 64px;
-  height: 64px;
+  width: 88px;
+  height: 88px;
   border-radius: 50%;
   overflow: hidden;
   border: 3px solid transparent;
@@ -1167,7 +1175,7 @@ button {
   object-fit: cover;
 }
 .avatar-option__media--default {
-  font-size: 1.9rem;
+  font-size: 2.4rem;
   color: var(--ink-soft);
   background: var(--bg);
 }
@@ -1191,7 +1199,7 @@ button {
   font-size: 0.72rem;
   font-weight: 600;
   color: var(--ink-soft);
-  max-width: 80px;
+  max-width: 96px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
