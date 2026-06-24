@@ -20,6 +20,16 @@ const FLOOR_COASTAL_MESSAGES = [
   'Lekker aan zee zeker? Tom is jaloers vanaf het droge.',
 ]
 
+// Persoonlijke, land-specifieke teksten voor Floor (numerieke ISO-landcode).
+// Deze hebben voorrang en verschijnen altijd bij dat specifieke land.
+const FLOOR_COUNTRY_MESSAGES = {
+  360: 'Back to your roots? Opa zou trots zijn.', // Indonesi\u00eb
+  380: 'Volgens mij heb je Tom net gemist toen je naar Rome ging.', // Itali\u00eb
+  418: 'Ben je hier aangevallen door bloedzuigers?', // Laos
+  36: 'Familiebezoek?', // Australi\u00eb
+  208: 'Een duur bezoekje bij de Alchemist?', // Denemarken
+}
+
 // Speelse teksten wanneer TOM een land aanvinkt.
 const TOM_MESSAGES = [
   'Tom pakt eindelijk ook een landje mee.',
@@ -52,8 +62,11 @@ function pick(arr) {
 const landWord = (n) => (Math.abs(n) === 1 ? 'land' : 'landen')
 
 // Random speelse tekst bij het aanvinken van een land.
-export function getMarkMessage(player, coastal) {
+export function getMarkMessage(player, coastal, code) {
   if (player === PLAYERS.FLOOR) {
+    // Persoonlijke land-grap heeft altijd voorrang.
+    const personal = FLOOR_COUNTRY_MESSAGES[String(code)]
+    if (personal) return personal
     const pool = coastal ? [...FLOOR_MESSAGES, ...FLOOR_COASTAL_MESSAGES] : FLOOR_MESSAGES
     return pick(pool)
   }

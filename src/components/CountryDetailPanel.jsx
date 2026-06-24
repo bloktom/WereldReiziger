@@ -41,7 +41,7 @@ export default function CountryDetailPanel({ country, player, data, onClose, sho
   const handleMarkVisited = async () => {
     try {
       await data.setVisited(player, code, name)
-      showToast(getMarkMessage(player, isCoastal(code)))
+      showToast(getMarkMessage(player, isCoastal(code), code))
     } catch (e) {
       showToast(humanizeError(e))
     }
