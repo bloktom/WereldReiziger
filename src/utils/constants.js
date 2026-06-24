@@ -23,6 +23,7 @@ export const STORAGE_KEYS = {
   visited: 'wereldrace.visited',
   battles: 'wereldrace.battles',
   seeded: 'wereldrace.seeded.v1',
+  avatar: 'wereldrace.avatar', // + '.Floor' / '.Tom'
 }
 
 export const VIEWS = {

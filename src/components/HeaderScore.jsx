@@ -1,9 +1,10 @@
 import { PLAYERS } from '../utils/constants'
 import { countVisited, sharedCountryCodes } from '../utils/countryStatus'
 import { getScoreStatus } from '../data/funnyMessages'
+import Avatar from './Avatar'
 
 // Scorebalk bovenin: Floor vs Tom, wie staat voor, hoeveel gedeeld.
-export default function HeaderScore({ visited, player, onSwitchPlayer }) {
+export default function HeaderScore({ visited, player, avatarId, onSwitchPlayer, onAvatarClick }) {
   const floorCount = countVisited(visited, PLAYERS.FLOOR)
   const tomCount = countVisited(visited, PLAYERS.TOM)
   const shared = sharedCountryCodes(visited).length
@@ -35,6 +36,13 @@ export default function HeaderScore({ visited, player, onSwitchPlayer }) {
         </div>
 
         <div className="header-score__me">
+          <Avatar
+            player={player}
+            avatarId={avatarId}
+            size={42}
+            onClick={onAvatarClick}
+            title="Wijzig je profielfoto"
+          />
           <span className={`me-badge me-badge--${player.toLowerCase()}`}>
             Jij speelt als {player}
           </span>

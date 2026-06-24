@@ -1,7 +1,9 @@
 import { PLAYERS } from '../utils/constants'
+import Avatar from './Avatar'
+import AvatarPicker from './AvatarPicker'
 
-// Instellingen: speler wisselen, demo-modus uitleg, data resetten.
-export default function Settings({ player, mode, onSwitchPlayer, onResetMock }) {
+// Instellingen: speler wisselen, profielfoto, demo-modus uitleg, data resetten.
+export default function Settings({ player, mode, avatarId, onSelectAvatar, onSwitchPlayer, onResetMock }) {
   const other = player === PLAYERS.FLOOR ? PLAYERS.TOM : PLAYERS.FLOOR
 
   return (
@@ -22,6 +24,18 @@ export default function Settings({ player, mode, onSwitchPlayer, onResetMock }) 
         <button type="button" className="btn btn--primary" onClick={onSwitchPlayer}>
           Wissel naar {other}
         </button>
+      </section>
+
+      <section className="settings__card">
+        <h3>Profielfoto</h3>
+        <div className="settings__avatar">
+          <Avatar player={player} avatarId={avatarId} size={64} />
+          <p>
+            Kies hieronder je profielfoto. Standaard is een simpel icoon. Je keuze wordt
+            onthouden in deze browser.
+          </p>
+        </div>
+        <AvatarPicker player={player} current={avatarId} onSelect={onSelectAvatar} />
       </section>
 
       <section className="settings__card">

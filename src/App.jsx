@@ -9,8 +9,10 @@ import Battles from './components/Battles'
 import Memories from './components/Memories'
 import Settings from './components/Settings'
 import Toast from './components/Toast'
+import AvatarPicker from './components/AvatarPicker'
 import { useTravelData } from './hooks/useTravelData'
 import { firebaseProjectId } from './firebase'
+import { loadAvatar, saveAvatar } from './data/avatars'
 import { PLAYERS, STORAGE_KEYS, VIEWS } from './utils/constants'
 
 export default function App() {
@@ -18,9 +20,21 @@ export default function App() {
   const [view, setView] = useState(VIEWS.MAP)
   const [selected, setSelected] = useState(null) // { code, name }
   const [toast, setToast] = useState('')
+  // Gekozen profielfoto per speler (uit localStorage).
+  const [avatars, setAvatars] = useState(() => ({
+    [PLAYERS.FLOOR]: loadAvatar(PLAYERS.FLOOR),
+    [PLAYERS.TOM]: loadAvatar(PLAYERS.TOM),
+  }))
+  const [showAvatarPicker, setShowAvatarPicker] = useState(false)
   const data = useTravelData()
 
   const showToast = useCallback((msg) => setToast(msg), [])
+
+  // Profielfoto van de actieve speler wijzigen + onthouden.
+  const setAvatar = useCallback((p, id) => {
+    saveAvatar(p, id)
+    setAvatars((prev) => ({ ...prev, [p]: id }))
+  }, [])
 
   // Speler kiezen + onthouden in localStorage.
   const choosePlayer = useCallback((p) => {
@@ -44,7 +58,12 @@ export default function App() {
 
   // Sluit het detailpaneel met Escape.
   useEffect(() => {
-    const onKey = (e) => e.key === 'Escape' && setSelected(null)
+    const onKey = (e) => {
+      if (e.key === 'Escape') {
+        setSelected(null)
+        setShowAvatarPicker(false)
+      }
+    }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
   }, [])
@@ -61,7 +80,13 @@ export default function App() {
 
   return (
     <div className={`app app--${player.toLowerCase()}`}>
-      <HeaderScore visited={data.visited} player={player} onSwitchPlayer={switchPlayer} />
+      <HeaderScore
+        visited={data.visited}
+        player={player}
+        avatarId={avatars[player]}
+        onSwitchPlayer={switchPlayer}
+        onAvatarClick={() => setShowAvatarPicker(true)}
+      />
       <NavMenu view={view} onChange={setView} />
 
       {data.mode === 'mock' && (
@@ -121,6 +146,8 @@ service cloud.firestore {
               <Settings
                 player={player}
                 mode={data.mode}
+                avatarId={avatars[player]}
+                onSelectAvatar={(id) => setAvatar(player, id)}
                 onSwitchPlayer={switchPlayer}
                 onResetMock={data.resetMockData}
               />
@@ -137,6 +164,38 @@ service cloud.firestore {
           onClose={() => setSelected(null)}
           showToast={showToast}
         />
+      )}
+
+      {showAvatarPicker && (
+        <>
+          <div className="panel-overlay" onClick={() => setShowAvatarPicker(false)} />
+          <div className="avatar-modal" role="dialog" aria-label="Kies je profielfoto">
+            <div className="avatar-modal__header">
+              <h2>Profielfoto van {player}</h2>
+              <button
+                type="button"
+                className="panel__close"
+                onClick={() => setShowAvatarPicker(false)}
+                aria-label="Sluiten"
+              >
+                ✕
+              </button>
+            </div>
+            <p className="avatar-modal__hint">
+              {player === PLAYERS.FLOOR
+                ? 'Kies een foto die past bij je roze territorium.'
+                : 'Kies een foto met smaak, blauw uiteraard.'}
+            </p>
+            <AvatarPicker
+              player={player}
+              current={avatars[player]}
+              onSelect={(id) => {
+                setAvatar(player, id)
+                setToast('Profielfoto bijgewerkt!')
+              }}
+            />
+          </div>
+        </>
       )}
 
       <Toast message={toast} onDone={() => setToast('')} />
