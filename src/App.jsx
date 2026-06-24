@@ -13,6 +13,7 @@ import AvatarPicker from './components/AvatarPicker'
 import { useTravelData } from './hooks/useTravelData'
 import { firebaseProjectId } from './firebase'
 import { DEFAULT_AVATAR_ID } from './data/avatars'
+import { humanizeError } from './utils/format'
 import { PLAYERS, STORAGE_KEYS, VIEWS } from './utils/constants'
 
 export default function App() {
@@ -38,7 +39,7 @@ export default function App() {
       try {
         await data.setProfileAvatar(p, id)
       } catch (e) {
-        setToast('Profielfoto opslaan mislukt: ' + (e?.message || 'onbekende fout'))
+        setToast(humanizeError(e))
       }
     },
     [data],

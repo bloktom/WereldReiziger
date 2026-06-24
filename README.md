@@ -81,17 +81,16 @@ Zodat Floor en Tom **elkaars** landen zien, koppel je een gratis Firebase-projec
 ### Firestore-beveiligingsregels
 
 Voor deze privé-app zonder login is open lezen/schrijven het simpelst. Plak dit
-onder **Firestore → Rules** (let op: iedereen met de link kan dan schrijven —
-prima voor een privé-linkje, niet voor gevoelige data):
+onder **Firestore → Rules** en klik **Publish** (let op: iedereen met de link kan
+dan schrijven — prima voor een privé-linkje, niet voor gevoelige data). Deze
+catch-all regel dekt alle collecties (`visitedCountries`, `countryBattles` én
+`profiles`), zodat je hem nooit hoeft aan te passen als de app uitbreidt:
 
 ```
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    match /visitedCountries/{doc} {
-      allow read, write: if true;
-    }
-    match /countryBattles/{doc} {
+    match /{document=**} {
       allow read, write: if true;
     }
   }
@@ -129,6 +128,14 @@ service cloud.firestore {
 | `floorScore` | number | berekende score Floor |
 | `tomScore` | number | berekende score Tom |
 | `winner` | string | `Floor`, `Tom` of `Tie` |
+| `updatedAt` | timestamp | laatst bijgewerkt |
+
+**Collection `profiles`** — document-id: `player` (`Floor` of `Tom`)
+
+| veld | type | omschrijving |
+| --- | --- | --- |
+| `player` | string | `Floor` of `Tom` |
+| `avatarId` | string | gekozen profielfoto (bestandsnaam of `default`) |
 | `updatedAt` | timestamp | laatst bijgewerkt |
 
 ---
