@@ -3,7 +3,7 @@ import { PLAYERS } from '../utils/constants'
 import { getCountryStatus, getVisitedDoc } from '../utils/countryStatus'
 import { flagEmoji, isCoastal } from '../data/countryMetadata'
 import { getMarkMessage } from '../data/funnyMessages'
-import { formatDate } from '../utils/format'
+import { formatDate, humanizeError } from '../utils/format'
 import BattleForm from './BattleForm'
 
 // Detailpaneel voor één land: status, notities, acties en eventueel de battle.
@@ -39,19 +39,31 @@ export default function CountryDetailPanel({ country, player, data, onClose, sho
   }[status.status]
 
   const handleMarkVisited = async () => {
-    await data.setVisited(player, code, name)
-    showToast(getMarkMessage(player, isCoastal(code)))
+    try {
+      await data.setVisited(player, code, name)
+      showToast(getMarkMessage(player, isCoastal(code)))
+    } catch (e) {
+      showToast(humanizeError(e))
+    }
   }
 
   const handleRemove = async () => {
     if (!window.confirm(`Weet je zeker dat je ${name} uit jouw bezochte landen wilt halen?`)) return
-    await data.removeVisited(player, code)
-    showToast(`${name} verwijderd uit jouw landen.`)
+    try {
+      await data.removeVisited(player, code)
+      showToast(`${name} verwijderd uit jouw landen.`)
+    } catch (e) {
+      showToast(humanizeError(e))
+    }
   }
 
   const handleSaveFields = async () => {
-    await data.updateVisitedFields(player, code, fields)
-    showToast('Opgeslagen!')
+    try {
+      await data.updateVisitedFields(player, code, fields)
+      showToast('Opgeslagen!')
+    } catch (e) {
+      showToast(humanizeError(e))
+    }
   }
 
   return (

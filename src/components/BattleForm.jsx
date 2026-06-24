@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { PLAYERS } from '../utils/constants'
 import { getBattleMessage } from '../data/funnyMessages'
+import { humanizeError } from '../utils/format'
 
 const EMPTY = {
   duration: '',
@@ -30,8 +31,12 @@ export default function BattleForm({ code, name, player, battle, onSave, showToa
       story: String(answers.story || '').trim(),
       rating: Number(answers.rating) || 0,
     }
-    await onSave(player, code, name, clean)
-    showToast?.('Battle-antwoorden opgeslagen. Spannend!')
+    try {
+      await onSave(player, code, name, clean)
+      showToast?.('Battle-antwoorden opgeslagen. Spannend!')
+    } catch (e) {
+      showToast?.(humanizeError(e))
+    }
   }
 
   const floorAnswered = !!battle?.floorAnswers
