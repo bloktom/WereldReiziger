@@ -90,7 +90,7 @@ export default function Scoreboard({ visited, battles, onSelect }) {
       <div className="overview__grid">
         <Section
           title="Floor-territorium"
-          hint="Beige, de kleur van die muur."
+          hint="Lichtroze, de kleur van die muur."
           items={floorList}
           variant="floor"
           onSelect={onSelect}

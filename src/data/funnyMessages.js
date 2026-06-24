@@ -8,7 +8,7 @@ const FLOOR_MESSAGES = [
   'Goed Floor, wat heb je daar allemaal gedaan?',
   'Met welk type vliegtuig ben je geweest\u2026?',
   'Weer een land erbij. Tom voelt de druk.',
-  'Floor claimt weer beige terrein.',
+  'Floor claimt weer roze terrein.',
   'Dit land past echt perfect bij je muur.',
   'Ok\u00e9 ok\u00e9, wereldreiziger Floor.',
   'Heeft Polarsteps dit ook goedgekeurd?',
@@ -32,12 +32,12 @@ const TOM_MESSAGES = [
 
 const BATTLE_MESSAGES = {
   Floor: [
-    'Floor wint dit land. Beige overheerst.',
+    'Floor wint dit land. Roze overheerst.',
     'Floor had meer verhalen, Tom had vooral goede bedoelingen.',
   ],
   Tom: [
     'Tom wint dit land. Eindelijk gerechtigheid.',
-    'Blauw verslaat beige. Smaak wint.',
+    'Blauw verslaat roze. Smaak wint.',
   ],
   Tie: [
     'Gelijkspel. Jullie moeten hier samen nog een keer heen.',

@@ -11,7 +11,7 @@ export default function Battles({ visited, battles, onSelect }) {
         <h2>⚔️ Landenbattles</h2>
         <p>
           Landen waar jullie allebei zijn geweest. Beantwoord de vragen en bepaal wie het
-          land verdient. Beige tegen blauw.
+          land verdient. Lichtroze tegen blauw.
         </p>
       </div>
 

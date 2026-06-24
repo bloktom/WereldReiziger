@@ -16,7 +16,7 @@ export default function Settings({ player, mode, onSwitchPlayer, onResetMock }) 
         <p>
           Je speelt nu als <strong>{player}</strong>.{' '}
           {player === PLAYERS.FLOOR
-            ? 'Beige, de officiële kleur van je twijfelachtige muur.'
+            ? 'Lichtroze, de officiële kleur van je muur.'
             : 'Blauw, omdat iemand hier tenminste smaak heeft.'}
         </p>
         <button type="button" className="btn btn--primary" onClick={onSwitchPlayer}>
@@ -48,7 +48,7 @@ export default function Settings({ player, mode, onSwitchPlayer, onResetMock }) 
         <h3>Over deze app</h3>
         <p>
           Een speelse reis-race tussen Floor en Tom. Vink landen af, claim territorium en
-          strijd om gedeelde landen via de landenbattle. Beige tegen blauw — moge de beste
+          strijd om gedeelde landen via de landenbattle. Lichtroze tegen blauw — moge de beste
           reiziger winnen.
         </p>
         <p className="settings__muted">

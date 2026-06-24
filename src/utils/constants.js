@@ -1,5 +1,5 @@
 // Vaste spelers en kleuren voor de hele app.
-// Floor speelt in beige (de officiële kleur van haar twijfelachtige muur),
+// Floor speelt in lichtroze (de officiële kleur van haar muur),
 // Tom speelt in blauw (omdat iemand hier tenminste smaak heeft).
 
 export const PLAYERS = {
@@ -8,8 +8,8 @@ export const PLAYERS = {
 }
 
 export const COLORS = {
-  floor: '#cdba8f', // beige — ja, die muurkleur
-  floorDark: '#b39d6c',
+  floor: '#e891b0', // lichtroze — ja, die muurkleur
+  floorDark: '#c15c85',
   tom: '#2d6cdf', // fris blauw
   tomDark: '#1f4fb0',
   neutral: '#dfe3e8',

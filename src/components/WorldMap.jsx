@@ -152,7 +152,7 @@ export default function WorldMap({ visited, battles, onSelect }) {
       {/* Legenda + inside joke */}
       <div className="map-legend">
         <div className="legend-row">
-          <span className="swatch swatch--floor" /> Beige gebied = Floor-territorium
+          <span className="swatch swatch--floor" /> Roze gebied = Floor-territorium
         </div>
         <div className="legend-row">
           <span className="swatch swatch--tom" /> Blauw gebied = Tom-territorium

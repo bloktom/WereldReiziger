@@ -23,7 +23,7 @@ export default function PlayerSelect({ onChoose }) {
             <span className="player-card__avatar">🧳</span>
             <span className="player-card__name">Floor</span>
             <span className="player-card__desc">
-              Speelt in beige, de offici&euml;le kleur van haar twijfelachtige muur.
+              Speelt in lichtroze, de offici&euml;le kleur van haar muur.
             </span>
           </button>
 
