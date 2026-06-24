@@ -65,7 +65,9 @@ const landWord = (n) => (Math.abs(n) === 1 ? 'land' : 'landen')
 export function getMarkMessage(player, coastal, code) {
   if (player === PLAYERS.FLOOR) {
     // Persoonlijke land-grap heeft altijd voorrang.
-    const personal = FLOOR_COUNTRY_MESSAGES[String(code)]
+    // Number() haalt eventuele voorloopnullen weg ("036" -> 36) zodat de
+    // landcodes uit de kaart (zoals Australië = "036") goed matchen.
+    const personal = FLOOR_COUNTRY_MESSAGES[Number(code)]
     if (personal) return personal
     const pool = coastal ? [...FLOOR_MESSAGES, ...FLOOR_COASTAL_MESSAGES] : FLOOR_MESSAGES
     return pick(pool)

@@ -54,7 +54,9 @@ const LANDLOCKED_CODES = new Set([
 export function isCoastal(code) {
   const c = String(code)
   if (!c || c === '-99' || c === 'undefined') return false
-  return !LANDLOCKED_CODES.has(c)
+  // "040" -> "40": voorloopnullen weg zodat de landlocked-lijst klopt.
+  const n = Number.isNaN(Number(c)) ? c : String(Number(c))
+  return !LANDLOCKED_CODES.has(n)
 }
 
 // Numerieke ISO-code -> alpha-2 code (voor vlag-emoji). Niet uitputtend, maar
@@ -85,7 +87,9 @@ const NUM_TO_ALPHA2 = {
 
 // Vlag-emoji uit een alpha-2 code (regional indicator symbols).
 export function flagEmoji(code) {
-  const a2 = NUM_TO_ALPHA2[String(code)]
+  // Number() haalt voorloopnullen weg ("036" -> "36") zodat de lookup klopt.
+  const key = Number.isNaN(Number(code)) ? String(code) : String(Number(code))
+  const a2 = NUM_TO_ALPHA2[key]
   if (!a2) return '🌍'
   return a2
     .toUpperCase()
